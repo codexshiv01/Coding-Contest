@@ -1,34 +1,25 @@
-FROM openjdk:17-jdk-slim
-
-# Install Maven, Docker CLI and dos2unix
-RUN apt-get update && \
-    apt-get install -y maven docker.io dos2unix && \
-    rm -rf /var/lib/apt/lists/*
+FROM maven:3.8.6-openjdk-17-slim AS build
 
 WORKDIR /app
 
-# Copy pom.xml first for better caching
+# Copy pom.xml and download dependencies
 COPY pom.xml ./
+RUN mvn dependency:go-offline -B
 
-# Download dependencies using Maven directly
-RUN mvn dependency:resolve
-
-# Copy Maven wrapper (optional, for compatibility)
-COPY .mvn/ .mvn/
-COPY mvnw ./
-
-# Fix line endings and make Maven wrapper executable
-RUN dos2unix ./mvnw && \
-    chmod +x ./mvnw
-
-# Copy source code
+# Copy source code and build
 COPY src ./src
-
-# Build the application using Maven directly
 RUN mvn clean package -DskipTests
+
+# Runtime stage
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+# Copy the built JAR from build stage
+COPY --from=build /app/target/coding-contest-backend-1.0.0.jar app.jar
 
 # Expose port
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "target/coding-contest-backend-1.0.0.jar"]
+CMD ["java", "-jar", "app.jar"]
