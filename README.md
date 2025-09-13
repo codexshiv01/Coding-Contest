@@ -59,7 +59,7 @@ Before running the application, ensure you have:
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/codexshiv01/Coding-Contest.git
    cd shodh-ai-coding-contest
    ```
 
@@ -655,17 +655,7 @@ npm test
 4. Add tests
 5. Submit a pull request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Spring Boot team for the excellent framework
-- React team for the powerful frontend library
-- Docker for containerization technology
-- Neon for managed PostgreSQL hosting
 
 ---
 
-**Built with ❤️ for Shodh AI by the Engineering Team**
+**Built with ❤️ by Shivansh Agrawal**
