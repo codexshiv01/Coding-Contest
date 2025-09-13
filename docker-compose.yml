@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database (using external Neon database)
   # Note: The application connects directly to the Neon database
