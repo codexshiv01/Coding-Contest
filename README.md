@@ -59,7 +59,7 @@ Before running the application, ensure you have:
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/codexshiv01/Coding-Contest.git
    cd shodh-ai-coding-contest
    ```
 
