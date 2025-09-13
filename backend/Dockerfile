@@ -1,27 +1,31 @@
 FROM openjdk:17-jdk-slim
 
-# Install Docker CLI for code execution
+# Install Maven, Docker CLI and dos2unix
 RUN apt-get update && \
-    apt-get install -y docker.io && \
+    apt-get install -y maven docker.io dos2unix && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy Maven wrapper and pom.xml
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+# Copy pom.xml first for better caching
+COPY pom.xml ./
 
-# Make Maven wrapper executable
-RUN chmod +x ./mvnw
+# Download dependencies using Maven directly
+RUN mvn dependency:resolve
 
-# Download dependencies
-RUN ./mvnw dependency:resolve
+# Copy Maven wrapper (optional, for compatibility)
+COPY .mvn/ .mvn/
+COPY mvnw ./
+
+# Fix line endings and make Maven wrapper executable
+RUN dos2unix ./mvnw && \
+    chmod +x ./mvnw
 
 # Copy source code
 COPY src ./src
 
-# Build the application
-RUN ./mvnw clean package -DskipTests
+# Build the application using Maven directly
+RUN mvn clean package -DskipTests
 
 # Expose port
 EXPOSE 8080
