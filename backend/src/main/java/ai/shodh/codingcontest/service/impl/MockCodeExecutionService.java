@@ -13,7 +13,7 @@ import java.util.Random;
  * Mock implementation of CodeExecutionService for demonstration purposes
  * This simulates code execution without requiring Docker
  */
-@Service
+// @Service  // ### CHANGE THIS #### - Commented out to disable mock service
 @Slf4j
 public class MockCodeExecutionService implements CodeExecutionService {
     

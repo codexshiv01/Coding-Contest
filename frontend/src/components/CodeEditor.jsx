@@ -12,22 +12,7 @@ const languageTemplates = {
 }`,
   python: `# ### CHANGE THIS ### - Implement your solution here
 
-`,
-  cpp: `#include <iostream>
-using namespace std;
-
-int main() {
-    // ### CHANGE THIS ### - Implement your solution here
-    
-    return 0;
-}`,
-  c: `#include <stdio.h>
-
-int main() {
-    // ### CHANGE THIS ### - Implement your solution here
-    
-    return 0;
-}`
+`
 };
 
 const statusIcons = {
@@ -165,8 +150,6 @@ function CodeEditor({ problem, contestId, username }) {
               >
                 <option value="java">☕ Java</option>
                 <option value="python">🐍 Python</option>
-                <option value="cpp">⚡ C++</option>
-                <option value="c">🔧 C</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

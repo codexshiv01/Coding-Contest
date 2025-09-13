@@ -15,7 +15,7 @@ The platform follows a microservices architecture with clear separation of conce
 ## 🚀 Features
 
 - **Contest Management**: Join contests by ID or browse active contests
-- **Problem Solving**: Multiple programming languages (Java, Python, C++, C)
+- **Problem Solving**: Multiple programming languages (Java, Python)
 - **Real-time Code Execution**: Secure Docker-based code evaluation
 - **Live Leaderboard**: Real-time ranking updates every 30 seconds
 - **Submission Tracking**: Asynchronous submission processing with live status updates
@@ -261,31 +261,23 @@ public CompletableFuture<Void> processSubmissionAsync(Long submissionId) {
 
 ### 3. Code Execution Architecture
 
-**Decision**: Evolved from Docker-based execution to Mock service for development simplicity, with clear abstraction for production deployment.
+**Decision**: Implemented real code execution service that compiles and validates code against test cases, ensuring accurate solution verification.
 
 **Interface Design**:
 ```java
 public interface CodeExecutionService {
-    CompletableFuture<ExecutionResult> executeCode(String code, String language, 
-                                                 List<TestCase> testCases);
+    ExecutionResult executeCode(Submission submission, List<TestCase> testCases);
 }
 ```
 
-**Implementation Options**:
+**Current Implementation**:
 
-#### Mock Service (Current - Development)
+#### Real Code Execution Service
 ```java
-@Service("mockCodeExecutionService")
-public class MockCodeExecutionService implements CodeExecutionService {
-    // Simulates execution with random results for testing
-}
-```
-
-#### Docker Service (Production-Ready)
-```java
-@Service("dockerCodeExecutionService") 
-public class DockerCodeExecutionService implements CodeExecutionService {
-    // Real Docker container execution with security
+@Service
+public class RealCodeExecutionService implements CodeExecutionService {
+    // Actual code compilation and execution with test case validation
+    // Supports Java (javac) and Python (python) with proper output comparison
 }
 ```
 
@@ -297,10 +289,10 @@ public class DockerCodeExecutionService implements CodeExecutionService {
 - **User Permissions**: Non-root user execution
 
 **Language Support Strategy**:
-- **Java**: `openjdk:11-alpine` with compilation and execution
-- **Python**: `python:3.9-alpine` with direct execution
-- **C++**: `gcc:9-alpine` with compilation step
-- **Extensible**: Easy to add new language containers
+- **Java**: Native `javac` compilation with execution and output validation
+- **Python**: Direct `python` execution with output comparison
+- **Real Validation**: Actual test case input/output matching instead of mock results
+- **Extensible**: Easy to add new language support by implementing execution methods
 
 ### 4. Frontend Architecture & State Management
 
@@ -592,17 +584,18 @@ npm test
 ## 🚧 Known Limitations & Future Improvements
 
 ### Current Limitations
-1. **Code Execution**: Simplified Docker execution (marked with `### CHANGE THIS ###`)
-2. **Language Support**: Limited to basic runtimes
-3. **File I/O**: No support for file-based input/output
+1. **Language Support**: Currently supports Java and Python only
+2. **File I/O**: No support for file-based input/output
+3. **Memory Tracking**: Basic memory usage monitoring (marked with `### CHANGE THIS ###`)
 4. **Plagiarism Detection**: Not implemented
 
 ### Future Enhancements
 1. **WebSocket Integration**: Real-time updates without polling
-2. **Advanced Code Execution**: Better compilation and execution handling
+2. **Additional Languages**: C++, C, JavaScript, and other language support
 3. **Analytics Dashboard**: Contest statistics and insights
 4. **Mobile App**: React Native mobile application
 5. **AI-Powered Hints**: Intelligent problem-solving assistance
+6. **Docker Integration**: Containerized code execution for enhanced security
 
 ## 🐛 Troubleshooting
 
@@ -643,9 +636,27 @@ npm test
 
 ### Adding New Languages
 
-1. Update `DockerCodeExecutionService.getExecuteCommand()`
-2. Add language template in `CodeEditor.jsx`
-3. Update Docker image with required runtime
+1. Add execution method in `RealCodeExecutionService` (e.g., `executeCppCode()`)
+2. Add language case in the switch statement
+3. Add language template in `CodeEditor.jsx`
+4. Add language option to the frontend dropdown
+
+## 📝 Changelog
+
+### v2.0.0 - Latest (Code Validation Update)
+- ✅ **Fixed Code Validation**: Replaced mock service with real code execution and validation
+- ✅ **Accurate Testing**: Solutions now properly validated against test cases with actual input/output comparison
+- ✅ **Language Support**: Streamlined to Java and Python for reliable execution
+- ✅ **Error Handling**: Enhanced compilation and runtime error detection
+- ✅ **Cross-Platform**: Fixed Windows compatibility issues for code execution
+- ❌ **Removed C++/C**: Temporarily removed due to Windows compatibility issues
+
+### v1.0.0 - Initial Release
+- ✅ Contest management and problem solving platform
+- ✅ Real-time leaderboard and submission tracking
+- ✅ Mock code execution for demonstration
+- ✅ Support for Java, Python, C++, C languages
+- ✅ Modern React frontend with Monaco editor
 
 ## 🤝 Contributing
 

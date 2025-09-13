@@ -1,0 +1,33 @@
+# Simplified Docker Compose for Development
+# Removes Redis dependency to avoid connection issues
+
+services:
+  # Backend Spring Boot Application
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: coding-contest-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default  # Use H2 database
+    restart: unless-stopped
+
+  # Frontend React Application  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: coding-contest-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080/api
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  default:
+    name: coding-contest-network
